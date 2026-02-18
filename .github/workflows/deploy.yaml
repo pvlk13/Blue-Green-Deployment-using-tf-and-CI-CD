@@ -74,6 +74,15 @@ jobs:
           terraform import aws_s3_bucket.eb_artifacts vijaya-eb-artifacts-272183979798 || true
       - name: Terraform Apply
         run: terraform apply -auto-approve -var="app_version=app-${{ github.sha }}"
+      
+      - name: Debug Terraform Files
+        run: |
+               echo "=== PWD ==="
+               pwd
+               echo "=== variables.tf content ==="
+               cat variables.tf
+               echo "=== all tf files ==="
+               ls -la  
 
       # 5. Health Check (plz Wait for Green to be Ready) 
       - name: Wait for Green Health
