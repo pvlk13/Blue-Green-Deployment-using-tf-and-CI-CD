@@ -1,3 +1,7 @@
+provider "aws" {
+  region = "us-east-1"
+}
+
 resource "aws_vpc" "vpc-green-blue" {
   
   cidr_block       =  var.my_cidr
