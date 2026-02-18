@@ -60,6 +60,32 @@ jobs:
       # --- STEP 4: HEALTH CHECK ---
       - name: Wait for Green Health
         run: |
+          # 1. Find the actual name (it will find app-green-19a5 automatically)
+          REAL_GREEN_NAME=$(aws elasticbeanstalk describe-environments --query "Environments[?starts_with(EnvironmentName, 'app-green')].EnvironmentName" --output text | awk '{print $1}')
+          
+          echo "Targeting Environment: $REAL_GREEN_NAME"
+
+          if [ "$REAL_GREEN_NAME" == "None" ] || [ -z "$REAL_GREEN_NAME" ]; then
+            echo "Error: Could not find an environment starting with 'app-green'"
+            exit 1
+          fi
+
+          # 2. Start the loop using the REAL name
+          for i in {1..30}; do
+            STATUS=$(aws elasticbeanstalk describe-environments --environment-names "$REAL_GREEN_NAME" --query "Environments[0].Status" --output text)
+            HEALTH=$(aws elasticbeanstalk describe-environments --environment-names "$REAL_GREEN_NAME" --query "Environments[0].Health" --output text)
+            
+            echo "Current Status of $REAL_GREEN_NAME: $STATUS, Health: $HEALTH (Attempt $i)"
+            
+            # Check for Ready status
+            if [ "$STATUS" == "Ready" ]; then
+              echo "Environment $REAL_GREEN_NAME is Ready!"
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "Error: Environment timed out."
+          exit 1    
           echo "Waiting for app-green-tf to reach Ready state..."
           for i in {1..30}; do
             STATUS=$(aws elasticbeanstalk describe-environments --environment-names app-green-tf --query "Environments[0].Status" --output text)
