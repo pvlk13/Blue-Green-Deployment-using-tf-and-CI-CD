@@ -1,6 +1,6 @@
 # Bucket to store application source bundles (.zip files)
 resource "aws_s3_bucket" "eb_artifacts" {
-  bucket = "vijaya-eb-artifacts-v2-${data.aws_caller_identity.current.account_id}"   
+  bucket = "vijaya-eb-artifacts-${data.aws_caller_identity.current.account_id}"   
   tags = {
     Name = "eb-artifacts"
     Environment = "prod"

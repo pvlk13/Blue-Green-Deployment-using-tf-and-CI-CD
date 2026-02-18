@@ -1,8 +1,8 @@
 resource "aws_iam_role" "test_role" {
   name = "eb-instance-role"
 
-  # Terraform's "jsonencode" function converts .
-  
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -23,7 +23,7 @@ resource "aws_iam_role_policy_attachment" "eb_webtier_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
 }
 resource "aws_iam_group" "test_group" {
-  name = "test-management-group-v2"
+  name = "test-management-group"
   path = "/"
 }
 resource "aws_iam_group_policy_attachment" "test-attach" {

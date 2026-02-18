@@ -1,6 +1,6 @@
 # This file defines the Elastic Beanstalk application for blue-green deployment.
 resource "aws_elastic_beanstalk_application" "app" {
-  name        = "vijaya-blue-green-app-v2"
+  name        = "vijaya-blue-green-app"
   description = "Production application for blue-green deployment"
 
   appversion_lifecycle {
@@ -30,10 +30,7 @@ resource "aws_elastic_beanstalk_environment" "blue-tf" {
    solution_stack_name = "64bit Amazon Linux 2023 v4.9.3 running Python 3.9"
    version_label       = aws_elastic_beanstalk_application_version.default.name # Pipeline injects this!
    depends_on = [
-     aws_elastic_beanstalk_application_version.default,
-     aws_internet_gateway.igw,
-     aws_nat_gateway.main,
-     aws_route_table.public,
+     aws_elastic_beanstalk_application_version.default
    ]
    setting {
      namespace = "aws:ec2:vpc"

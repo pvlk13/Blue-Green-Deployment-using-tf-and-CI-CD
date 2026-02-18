@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
 resource "aws_vpc" "vpc-green-blue" {
   
   cidr_block       =  var.my_cidr
@@ -37,7 +33,6 @@ resource "aws_internet_gateway" "igw" {
    }
 resource "aws_eip" "nat" {
     domain = "vpc"
-    depends_on = [aws_internet_gateway.igw]
     tags = {Name = "nat-eip"}
 }  
 
@@ -48,8 +43,6 @@ resource "aws_nat_gateway" "main" {
     depends_on = [ aws_internet_gateway.igw ]
   
 }
-
-
 
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc-green-blue.id

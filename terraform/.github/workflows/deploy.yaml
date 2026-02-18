@@ -10,7 +10,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     
-    # We assume your Terraform files are in a 'terraform'.
+    # We assume your Terraform files are in a 'terraform' folder
     defaults:
       run:
         working-directory: ./terraform
@@ -60,7 +60,7 @@ jobs:
       # 3. Upload Zip to S3
       - name: Upload to S3
         run: |
-          aws s3 cp ./app-${{ github.sha }}.zip s3://vijaya-eb-artifacts-v2-${{ steps.account.outputs.id }}/app-${{ github.sha }}.zip
+          aws s3 cp ./app-${{ github.sha }}.zip s3://vijaya-eb-artifacts-${{ steps.account.outputs.id }}/app-${{ github.sha }}.zip
           echo "Waiting 15 seconds for S3 consistency..."
           sleep 30
 

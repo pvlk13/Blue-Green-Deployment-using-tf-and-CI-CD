@@ -1,6 +1,6 @@
 # 1. Local Terraform directories
 # Contains provider binaries and modules (bulky and recreatable)
-
+**/.terraform/*
 
 # 2. Terraform state files
 # Contains sensitive information in plaintext; use a remote backend instead
@@ -33,6 +33,3 @@ override.tf.json
 # 8. CLI configuration files
 .terraformrc
 terraform.rc
-
-
-
