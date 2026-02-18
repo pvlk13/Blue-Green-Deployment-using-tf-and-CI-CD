@@ -13,7 +13,7 @@ crash.*.log
 
 # 4. Variables files
 # These often contain passwords, keys, or environment-specific data
-*.tfvars
+
 *.tfvars.json
 
 # 5. Override files
