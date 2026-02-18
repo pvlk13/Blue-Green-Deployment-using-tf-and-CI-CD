@@ -3,6 +3,7 @@ name: "Production Blue-Green Deployment"
 # This workflow triggers on every push to the 'main' branch
 on:
   push:
+
     branches:
       - main
 
@@ -70,8 +71,11 @@ jobs:
         run: terraform init
       - name: Terraform Import Existing Resources
         run: |
-          terraform import aws_elastic_beanstalk_application.app vijaya-blue-green-app || true
-          terraform import aws_s3_bucket.eb_artifacts vijaya-eb-artifacts-272183979798 || true
+            terraform state show aws_elastic_beanstalk_application.app || \
+            terraform import aws_elastic_beanstalk_application.app vijaya-blue-green-app
+    
+            terraform state show aws_s3_bucket.eb_artifacts || \
+            terraform import aws_s3_bucket.eb_artifacts vijaya-eb-artifacts-272183979798        
       - name: Terraform Apply
         run: terraform apply -auto-approve -var="app_version=app-${{ github.sha }}"
       

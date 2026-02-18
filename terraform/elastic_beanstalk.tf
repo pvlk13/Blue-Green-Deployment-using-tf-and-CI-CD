@@ -9,7 +9,7 @@ resource "aws_elastic_beanstalk_application" "app" {
     delete_source_from_s3 = false
   }
   lifecycle {
-    prevent_destroy = true
+    ignore_changes = all
   }
 }
 # The Blue Environment (Production)
