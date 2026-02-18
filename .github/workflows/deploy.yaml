@@ -75,7 +75,7 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve -var="app_version=app-${{ github.sha }}"
 
-      # 5. Health Check (Wait for Green to be Ready)
+      # 5. Health Check (plz Wait for Green to be Ready) 
       - name: Wait for Green Health
         run: |
           echo "Waiting for app-green to reach Ready state..."
