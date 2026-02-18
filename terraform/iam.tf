@@ -1,5 +1,5 @@
 resource "aws_iam_role" "test_role" {
-  name = "eb-instance-role"
+  name = "eb-role-${random_id.suffix.hex}"
 
   # Terraform's "jsonencode" function converts .
   
@@ -32,7 +32,7 @@ resource "aws_iam_group_policy_attachment" "test-attach" {
 }
 
 resource "aws_iam_instance_profile" "eb_profile" {
-  name = "eb-instance-profile"
+  name = "eb-profile-${random_id.suffix.hex}"
   role = aws_iam_role.test_role.name
 }
 # Add this for health reporting and logging

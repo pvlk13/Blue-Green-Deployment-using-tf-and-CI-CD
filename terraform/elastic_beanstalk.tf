@@ -1,6 +1,6 @@
 # This file defines the Elastic Beanstalk application for blue-green deployment.
 resource "aws_elastic_beanstalk_application" "app" {
-  name        = "vijaya-blue-green-app-v2"
+  name        = "vijaya-app-${random_id.suffix.hex}"
   description = "Production application for blue-green deployment"
 
   appversion_lifecycle {
@@ -14,7 +14,7 @@ resource "aws_elastic_beanstalk_application" "app" {
 }
 # The Blue Environment (Production)
 resource "aws_elastic_beanstalk_environment" "blue-tf" {
-  name                = "app-blue-tf"
+  name                = "app-blue-${random_id.suffix.hex}"
   application         = aws_elastic_beanstalk_application.app.name
   solution_stack_name = "64bit Amazon Linux 2023 v4.9.3 running Python 3.9"
   
@@ -28,7 +28,7 @@ resource "aws_elastic_beanstalk_environment" "blue-tf" {
 
 # # The Green Environment (Staging/Target)
  resource "aws_elastic_beanstalk_environment" "green-tf" {
-   name                = "app-green-tf"
+   name                = "app-green-${random_id.suffix.hex}"
    application         = aws_elastic_beanstalk_application.app.name
    solution_stack_name = "64bit Amazon Linux 2023 v4.9.3 running Python 3.9"
    version_label       = aws_elastic_beanstalk_application_version.default.name # Pipeline injects this!
