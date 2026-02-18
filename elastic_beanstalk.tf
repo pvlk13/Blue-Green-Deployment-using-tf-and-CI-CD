@@ -1,6 +1,6 @@
 # This file defines the Elastic Beanstalk application for blue-green deployment.
 resource "aws_elastic_beanstalk_application" "app" {
-  name        = "vijaya-blue-green-app"
+  name        = "vijaya-blue-green-app-v2"
   description = "Production application for blue-green deployment"
 
   appversion_lifecycle {

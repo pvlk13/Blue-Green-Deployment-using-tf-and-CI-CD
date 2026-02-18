@@ -23,7 +23,7 @@ resource "aws_iam_role_policy_attachment" "eb_webtier_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
 }
 resource "aws_iam_group" "test_group" {
-  name = "test-management-group"
+  name = "test-management-group-v2"
   path = "/"
 }
 resource "aws_iam_group_policy_attachment" "test-attach" {
