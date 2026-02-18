@@ -33,6 +33,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
+      
 
       # 1. Get AWS Account ID (to find your S3 bucket dynamically)
       - name: Get AWS Account ID
@@ -60,14 +61,17 @@ jobs:
       # 3. Upload Zip to S3
       - name: Upload to S3
         run: |
-          aws s3 cp ./app-${{ github.sha }}.zip s3://vijaya-eb-artifacts-v2-${{ steps.account.outputs.id }}/app-${{ github.sha }}.zip
+          aws s3 cp ./app-${{ github.sha }}.zip s3://vijaya-eb-artifacts-${{ steps.account.outputs.id }}/app-${{ github.sha }}.zip
           echo "Waiting 15 seconds for S3 consistency..."
           sleep 30
 
       # 4. Terraform Apply (Deploy to Green)
       - name: Terraform Init
         run: terraform init
-
+      - name: Terraform Import Existing Resources
+        run: |
+          terraform import aws_elastic_beanstalk_application.app vijaya-blue-green-app || true
+          terraform import aws_s3_bucket.eb_artifacts vijaya-eb-artifacts-272183979798 || true
       - name: Terraform Apply
         run: terraform apply -auto-approve -var="app_version=app-${{ github.sha }}"
 
