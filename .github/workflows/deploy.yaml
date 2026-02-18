@@ -102,6 +102,21 @@ jobs:
       # --- STEP 5: SWAP ---
       - name: Swap CNAMEs
         run: |
+          # 1. Dynamically find the full names of both environments
+          BLUE_NAME=$(aws elasticbeanstalk describe-environments --query "Environments[?starts_with(EnvironmentName, 'app-blue')].EnvironmentName" --output text | awk '{print $1}')
+          GREEN_NAME=$(aws elasticbeanstalk describe-environments --query "Environments[?starts_with(EnvironmentName, 'app-green')].EnvironmentName" --output text | awk '{print $1}')
+          
+          echo "Current Blue Environment: $BLUE_NAME"
+          echo "Current Green Environment: $GREEN_NAME"
+
+          # 2. Safety check: make sure both were found
+          if [ -z "$BLUE_NAME" ] || [ "$BLUE_NAME" == "None" ] || [ -z "$GREEN_NAME" ] || [ "$GREEN_NAME" == "None" ]; then
+            echo "Error: Could not find one or both environments to swap."
+            exit 1
+          fi
+
+          # 3. Perform the swap
+          echo "Swapping CNAMEs between $BLUE_NAME and $GREEN_NAME..."
           aws elasticbeanstalk swap-environment-cnames \
-            --source-environment-name app-blue-tf \
-            --destination-environment-name app-green-tf
+            --source-environment-name "$BLUE_NAME" \
+            --destination-environment-name "$GREEN_NAME"
