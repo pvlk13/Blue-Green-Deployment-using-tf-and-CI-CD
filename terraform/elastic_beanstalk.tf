@@ -1,4 +1,15 @@
 # 1. The Application Version (Your pipeline uses this)
+resource "aws_elastic_beanstalk_application" "app" { # This name must be "app"
+  name = "vijaya-app-${random_id.suffix.hex}"
+  description = "Production application for blue-green deployment"
+
+  appversion_lifecycle {
+    service_role          = aws_iam_role.test_role.arn
+    max_count             = 10
+    delete_source_from_s3 = false
+  }
+}
+
 resource "aws_elastic_beanstalk_application_version" "default" {
   name        = var.app_version
   application = aws_elastic_beanstalk_application.app.name
