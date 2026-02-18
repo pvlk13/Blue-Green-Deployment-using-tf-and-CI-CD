@@ -1,0 +1,35 @@
+# 1. Local Terraform directories
+# Contains provider binaries and modules (bulky and recreatable)
+**/.terraform/*
+
+# 2. Terraform state files
+# Contains sensitive information in plaintext; use a remote backend instead
+*.tfstate
+*.tfstate.*
+
+# 3. Crash log files
+crash.log
+crash.*.log
+
+# 4. Variables files
+# These often contain passwords, keys, or environment-specific data
+*.tfvars
+*.tfvars.json
+
+# 5. Override files
+# Used for local adjustments that shouldn't affect the team
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# 6. Ignore transient lock info files
+.terraform.tfstate.lock.info
+
+# 7. Plan output files
+# Generated via 'terraform plan -out=tfplan'
+*tfplan*
+
+# 8. CLI configuration files
+.terraformrc
+terraform.rc
