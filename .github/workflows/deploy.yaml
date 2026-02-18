@@ -69,13 +69,13 @@ jobs:
       # 4. Terraform Apply (Deploy to Green)
       - name: Terraform Init
         run: terraform init
-      - name: Terraform Import Existing Resources
-        run: |
-            terraform state show aws_elastic_beanstalk_application.app || \
-            terraform import aws_elastic_beanstalk_application.app vijaya-blue-green-app
-    
-            terraform state show aws_s3_bucket.eb_artifacts || \
-            terraform import aws_s3_bucket.eb_artifacts vijaya-eb-artifacts-272183979798        
+
+      - name: Terraform Plan
+        run: terraform plan -var="app_version=app-${{ github.sha }}"  
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -var="app_version=app-${{ github.sha }}"  
+      
       - name: Terraform Apply
         run: terraform apply -auto-approve -var="app_version=app-${{ github.sha }}"
       

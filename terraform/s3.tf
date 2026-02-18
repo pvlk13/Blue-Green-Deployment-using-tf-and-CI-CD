@@ -6,8 +6,7 @@ resource "aws_s3_bucket" "eb_artifacts" {
     Environment = "prod"
   } 
   lifecycle {
-    prevent_destroy = true
-    ignore_changes  = [bucket]
+    ignore_changes  = all
   }
 }
 
