@@ -30,7 +30,10 @@ resource "aws_elastic_beanstalk_environment" "blue-tf" {
    solution_stack_name = "64bit Amazon Linux 2023 v4.9.3 running Python 3.9"
    version_label       = aws_elastic_beanstalk_application_version.default.name # Pipeline injects this!
    depends_on = [
-     aws_elastic_beanstalk_application_version.default
+     aws_elastic_beanstalk_application_version.default,
+     aws_internet_gateway.igw,
+     aws_nat_gateway.main,
+     aws_route_table.public
    ]
    setting {
      namespace = "aws:ec2:vpc"
