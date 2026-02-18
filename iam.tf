@@ -1,7 +1,7 @@
 resource "aws_iam_role" "test_role" {
   name = "eb-instance-role"
 
-  # Terraform's "jsonencode" function converts a
+  # Terraform's "jsonencode" function converts .
   
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
