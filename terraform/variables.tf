@@ -26,3 +26,8 @@ variable "app_version" {
   type        = string
   default     = "v1"
 }
+
+variable "azs" {
+  type    = list(string)
+  default = ["us-east-1a", "us-east-1b"]
+}
