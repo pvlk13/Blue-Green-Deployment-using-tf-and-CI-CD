@@ -8,6 +8,9 @@ resource "aws_elastic_beanstalk_application" "app" {
     max_count             = 10
     delete_source_from_s3 = false
   }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 # The Blue Environment (Production)
 resource "aws_elastic_beanstalk_environment" "blue-tf" {

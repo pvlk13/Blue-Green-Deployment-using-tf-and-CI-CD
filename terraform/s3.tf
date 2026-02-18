@@ -5,6 +5,10 @@ resource "aws_s3_bucket" "eb_artifacts" {
     Name = "eb-artifacts"
     Environment = "prod"
   } 
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [bucket]
+  }
 }
 
 #Enable versioning for safety
