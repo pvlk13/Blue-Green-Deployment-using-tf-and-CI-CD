@@ -8,12 +8,4 @@ import {
   id = "vijaya-eb-artifacts-272183979798"
 }
 
-import {
-  to = aws_elastic_beanstalk_environment.blue-tf
-  id = "app-blue-tf"
-}
 
-import {
-  to = aws_elastic_beanstalk_environment.green-tf
-  id = "app-green-tf"
-}
