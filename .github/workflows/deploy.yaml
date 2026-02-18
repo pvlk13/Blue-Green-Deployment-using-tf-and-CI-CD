@@ -30,65 +30,15 @@ jobs:
           aws-region: us-east-1
 
       - name: Get AWS Account ID
-        id: account
+        id: account_info  # CHANGED THIS TO BE UNIQUE
         run: echo "id=$(aws sts get-caller-identity --query Account --output text)" >> $GITHUB_OUTPUT
 
       - name: Terraform Init
         run: terraform init
 
-      # --- STEP 1: ONLY CREATE THE BUCKET ---
-      # This creates the "box" but doesn't try to build the Beanstalk app yet.
-      - name: Terraform Apply Bucket Only
+      # --- STEP 1: CREATE BUCKET ONLY ---
+      - name: Terraform Apply Bucket
         run: terraform apply -target=aws_s3_bucket.eb_artifacts -auto-approve
-
-      # --- STEP 2: PACKAGE AND UPLOAD THE REAL CODE ---
-      # Now that the bucket exists, we put the actual file inside it.
-      - name: Package Application Code
-        working-directory: .
-        run: |
-          zip -j ./app-${{ github.sha }}.zip ./src/application.py ./src/requirements.txt
-          mv ./app-${{ github.sha }}.zip ./terraform/
-
-      - name: Upload to S3
-        run: |
-          # Use the actual filename for the Key, not "initial.zip"
-          aws s3 cp ./app-${{ github.sha }}.zip s3://vijaya-artifacts-19a5-272183979798/app-${{ github.sha }}.zip
-          sleep 10
-
-      # --- STEP 3: BUILD EVERYTHING ELSE ---
-      # Now that the file is in S3, Beanstalk will be happy.
-      - name: Terraform Apply Full
-        run: terraform apply -auto-approve -var="app_version=app-${{ github.sha }}"
-
-      # ... (Rest of your health check and swap steps)
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: "1.7.0"
-          terraform_wrapper: false
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      - name: Get AWS Account ID
-        id: account
-        run: echo "id=$(aws sts get-caller-identity --query Account --output text)" >> $GITHUB_OUTPUT
-
-      # --- STEP 1: RUN TERRAFORM FIRST ---
-      # This creates the S3 bucket so the upload in the next step actually works.
-      - name: Terraform Init
-        run: terraform init
-
-      - name: Terraform Apply (Infra Only)
-        # We pass a dummy version because the zip doesn't exist yet
-        run: terraform apply -auto-approve -var="app_version=initial"
 
       # --- STEP 2: PACKAGE AND UPLOAD ---
       - name: Package Application Code
@@ -99,12 +49,12 @@ jobs:
 
       - name: Upload to S3
         run: |
-          # NOTE: Ensure this bucket name matches your S3.tf file exactly!
-          aws s3 cp ./app-${{ github.sha }}.zip s3://vijaya-eb-artifacts-v2-${{ steps.account.outputs.id }}/app-${{ github.sha }}.zip
+          # Matches the hardcoded name we set
+          aws s3 cp ./app-${{ github.sha }}.zip s3://vijaya-artifacts-19a5-272183979798/app-${{ github.sha }}.zip
           sleep 10
 
-      # --- STEP 3: UPDATE BEANSTALK VERSION ---
-      - name: Terraform Apply (Update Version)
+      # --- STEP 3: FULL INFRASTRUCTURE DEPLOY ---
+      - name: Terraform Apply Full
         run: terraform apply -auto-approve -var="app_version=app-${{ github.sha }}"
 
       # --- STEP 4: HEALTH CHECK ---
@@ -112,20 +62,18 @@ jobs:
         run: |
           echo "Waiting for app-green-tf to reach Ready state..."
           for i in {1..30}; do
-            # Renamed to match your .tf file (app-green-tf)
             STATUS=$(aws elasticbeanstalk describe-environments --environment-names app-green-tf --query "Environments[0].Status" --output text)
             HEALTH=$(aws elasticbeanstalk describe-environments --environment-names app-green-tf --query "Environments[0].Health" --output text)
-            
             echo "Current Status: $STATUS, Health: $HEALTH (Attempt $i)"
             if [ "$STATUS" == "Ready" ] && [ "$HEALTH" == "Green" ]; then
-              echo "Environment is Ready and Healthy!"
+              echo "Environment is Healthy!"
               exit 0
             fi
             sleep 30
           done
           exit 1
 
-      # --- STEP 5: THE SWAP ---
+      # --- STEP 5: SWAP ---
       - name: Swap CNAMEs
         run: |
           aws elasticbeanstalk swap-environment-cnames \
