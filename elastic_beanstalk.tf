@@ -33,7 +33,7 @@ resource "aws_elastic_beanstalk_environment" "blue-tf" {
      aws_elastic_beanstalk_application_version.default,
      aws_internet_gateway.igw,
      aws_nat_gateway.main,
-     aws_route_table.public
+     aws_route_table.public,
    ]
    setting {
      namespace = "aws:ec2:vpc"
