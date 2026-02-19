@@ -25,10 +25,10 @@ To update the application without downtime:
 
    - **Instance SG**: Only allows Inbound traffic from the Load Balancer Security Group.   
 
-![alt text](image-1.png)    
+![alt text](image-13.png)   
 
 
-The above image is the Architecture of this project for a single AZ in project I implemented for two AZ but represented single AZ in picture for simplicity.
+The above image is the Architecture of this project for a this project .
 
 ## Project Structure:
 
