@@ -59,6 +59,28 @@ resource "aws_elastic_beanstalk_environment" "blue-tf" {
     name      = "SecurityGroups"
     value     = aws_security_group.eb_instance_sg.id
   }
+
+  # Enable log streaming to CloudWatch
+  setting {
+    namespace = "aws:elasticbeanstalk:cloudwatch:logs"
+    name      = "StreamLogs"
+    value     = "true"
+  }
+
+  # How long to keep the logs (in days)
+  setting {
+    namespace = "aws:elasticbeanstalk:cloudwatch:logs"
+    name      = "RetentionInDays"
+    value     = "7"
+  }
+
+  # Health reporting is also useful to see in logs
+  setting {
+    namespace = "aws:elasticbeanstalk:healthreporting:system"
+    name      = "SystemType"
+    value     = "enhanced"
+  }
+
 }
 
 # 3. THE GREEN ENVIRONMENT (Identical settings, different version)
@@ -108,5 +130,26 @@ resource "aws_elastic_beanstalk_environment" "green-tf" {
     namespace = "aws:ec2:vpc"
     name      = "AssociatePublicIpAddress"
     value     = "false" # Keep them private!
+  }
+
+  # Enable log streaming to CloudWatch
+  setting {
+    namespace = "aws:elasticbeanstalk:cloudwatch:logs"
+    name      = "StreamLogs"
+    value     = "true"
+  }
+
+  # How long to keep the logs (in days)
+  setting {
+    namespace = "aws:elasticbeanstalk:cloudwatch:logs"
+    name      = "RetentionInDays"
+    value     = "7"
+  }
+
+  # Health reporting is also useful to see in logs
+  setting {
+    namespace = "aws:elasticbeanstalk:healthreporting:system"
+    name      = "SystemType"
+    value     = "enhanced"
   }
 }

@@ -39,8 +39,14 @@ resource "aws_iam_instance_profile" "eb_profile" {
 resource "aws_iam_role_policy_attachment" "eb_worker_tier" {
   role       = aws_iam_role.test_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier"
+  
 }
 
+#For looking into Cloudwatch for private instances
+resource "aws_iam_role_policy_attachment" "logs"{
+  role = aws_iam_role.test_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
 # Add this if you are using Docker or Multi-container Python
 resource "aws_iam_role_policy_attachment" "eb_multicontainer" {
   role       = aws_iam_role.test_role.name
