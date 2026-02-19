@@ -19,11 +19,13 @@ To update the application without downtime:
 
    - **Decommission**: Once verified, the old Blue environment can be terminated or kept as a rollback target.   
 
-## Security & Monitoring
-# Security Groups
-    - **Load Balancer SG**: Allows Inbound HTTP (Port 80) from 0.0.0.0/0.
+# Security & Monitoring
+## Security Groups:
+   - **Load Balancer SG**: Allows Inbound HTTP (Port 80) from 0.0.0.0/0.
 
-    - **Instance SG**: Only allows Inbound traffic from the Load Balancer Security Group.   
+   - **Instance SG**: Only allows Inbound traffic from the Load Balancer Security Group.   
 
-    ![alt text](image.png)
+![alt text](image-1.png)    
+
+
 The above image is the Architecture of this project for a single AZ in project I implemented for two AZ but represented single AZ in picture for simplicity.
