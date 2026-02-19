@@ -390,6 +390,10 @@ resource "aws_elastic_beanstalk_environment" "green-tf" {
   }
 }
 ```
+![alt text](image-9.png)
+
+![alt text](image-10.png)
+
 ### route-table.tf
 
 ``` hcl
@@ -515,5 +519,5 @@ resource "aws_internet_gateway" "igw" {
    }
    }
 ```   
-
+![alt text](image-8.png)
 
