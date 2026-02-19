@@ -29,3 +29,37 @@ To update the application without downtime:
 
 
 The above image is the Architecture of this project for a single AZ in project I implemented for two AZ but represented single AZ in picture for simplicity.
+
+### main.tf
+``` hcl
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "random_id" "suffix" {
+  byte_length = 2
+}
+
+
+resource "aws_eip" "nat" {
+    domain = "vpc"
+    depends_on = [aws_internet_gateway.igw]
+    tags = {Name = "nat-eip"}
+}  
+``` hcl
+
+### vpc.tf
+
+``` hcl
+resource "aws_vpc" "vpc-green-blue" {
+  
+  cidr_block       =  var.my_cidr
+  instance_tenancy = "default"
+  enable_dns_hostnames = true
+  enable_dns_support = true
+
+  tags = {
+    Name = "blue-green-vpc"
+  }
+}
+``` hcl
