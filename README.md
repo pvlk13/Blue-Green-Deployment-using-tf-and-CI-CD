@@ -521,3 +521,8 @@ resource "aws_internet_gateway" "igw" {
 ```   
 ![alt text](image-8.png)
 
+From running the pipeline we can check for the beanstack url's
+
+![alt text](image-11.png)
+
+![alt text](image-12.png)
