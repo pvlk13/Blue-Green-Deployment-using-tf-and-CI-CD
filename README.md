@@ -135,6 +135,10 @@ resource "aws_subnet" "subnet-blue-green-public" {
        }
  }
 ```
+![alt text](image-4.png)
+
+![alt text](image-5.png)
+
 ### security-group.tf
 
 ``` hcl
@@ -427,6 +431,10 @@ resource "aws_route_table_association" "private_assoc" {
   
 }
 ```
+![alt text](image-6.png)
+
+![alt text](image-7.png)
+
 ### nat.tf
 ``` hcl
 resource "aws_nat_gateway" "main" {
@@ -437,6 +445,9 @@ resource "aws_nat_gateway" "main" {
   
 }
 ```
+![alt text](image-3.png)
+
+
 ### iam.tf
 
 ``` hcl
@@ -504,3 +515,5 @@ resource "aws_internet_gateway" "igw" {
    }
    }
 ```   
+
+
