@@ -68,19 +68,6 @@ To update the application without downtime:
 - ✅ Scalable and production-ready architecture  
 
 ---
-
-## 📁 Project Structure
-
-├── terraform/
-│ ├── main.tf
-│ ├── variables.tf
-│ ├── outputs.tf
-├── pipeline/
-├── scripts/
-└── README.md
-
----
-
 ## 🧠 Key Learnings
 
 - Understanding Blue-Green deployment strategy  
